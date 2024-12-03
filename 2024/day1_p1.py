@@ -5,7 +5,7 @@ def main():
     right_array = []
     res = 0
 
-    with open('input.txt', 'r') as file:
+    with open('day1_input.txt', 'r') as file:
         for line in file:
             left, right = map(int, line.split())
             left_array.append(left)
