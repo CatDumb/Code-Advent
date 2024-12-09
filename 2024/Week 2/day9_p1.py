@@ -1,56 +1,51 @@
 def gen_array(string):
-    generated_string = ''
-    block = 0
-    for i in range(len(string)):
-        if i % 2 == 0:
-            for j in range(int(string[i])):
-                generated_string += str(block)
-            block += 1
-        else:
-            for j in range(int(string[i])):
-                generated_string += '.'
-    return generated_string
+    genereated_list = []
+    for i in range(0, len(string), 2):
+        id = i // 2
+        for j in range(int(string[i])):
+            genereated_list.append(id)
+        
+        if (i + 1) < len(string):
+            for k in range(int(string[i + 1])):
+                genereated_list.append('.')
+    return genereated_list
 
-def checksum(string):
+def compact_array(list):
+    left = 0
+    right = len(list) - 1
+    
+    while left < right:
+        while list[left] != '.':
+            left += 1
+            
+        while list[right] == '.':
+            right -= 1
+            
+        if left >= right:
+            break
+        
+        list[left], list[right] = list[right], list[left]
+    return list
+
+def checksum(list):
     res = 0
-    for i in range(len(string)):
-        if string[i] != '.':
-            res += int(string[i]) * i
-    return res
-
+    
+    for i in range(0, len(list)):
+        if list[i] != '.':
+            res += int(list[i]) * i
+    
+    return res    
+                 
 def main():
     with open('day9_input.txt') as file:
         data = file.read().strip()
     
-    parsed_string = gen_array(data)
-    print("Parsed String:", parsed_string)
-    
-    free_index = []
-    taken_index = []
-    
-    for i in range(len(parsed_string)):
-        if parsed_string[i] != '.':
-            taken_index.append(i)
-        else:
-            free_index.append(i)
-    
-    print("Initial Free Index:", free_index)
-    print("Initial Taken Index:", taken_index)
-    
-    parsed_list = list(parsed_string)  # Convert string to list for swapping
-    
-    while free_index and taken_index:
-        if free_index[0] < taken_index[-1]:
-            # Swap elements
-            parsed_list[free_index[0]], parsed_list[taken_index[-1]] = parsed_list[taken_index[-1]], parsed_list[free_index[0]]
-            free_index.pop(0)
-            taken_index.pop(-1)
-        else:
-            break
-
-    parsed_string = ''.join(parsed_list)  # Convert list back to string
-    print("Compacted String:", parsed_string)
-    print("Res:", checksum(parsed_string))
+    generated = gen_array(data)
+    print(generated)
+    compacted = compact_array(generated)
+    print(compacted)
+    res = checksum(compacted)
+    print("Res:", res)
 
 if __name__ == '__main__':
     main()
